@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=600, initial-scale=1.0">
+    <title>Handy Utils • Meta Display</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #000;
+            color: #0f0;
+            font-family: system-ui, -apple-system, sans-serif;
+            height: 600px;
+            width: 600px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        h1 { font-size: 28px; margin: 0 0 20px 0; text-align: center; }
+        .menu { display: flex; flex-direction: column; gap: 12px; }
+        .focusable {
+            background: #111;
+            padding: 16px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.2s;
+        }
+        .focusable:focus, .focusable.active {
+            border-color: #0f0;
+            background: #222;
+            box-shadow: 0 0 15px #0f0;
+        }
+        .screen { display: none; flex-direction: column; height: 100%; }
+        .screen.active { display: flex; }
+        input, button {
+            background: #111;
+            color: #0f0;
+            border: 1px solid #333;
+            padding: 10px;
+            margin: 8px 0;
+            font-size: 18px;
+        }
+        #todo-list { list-style: none; padding: 0; }
+        #todo-list li { padding: 8px; background: #111; margin: 4px 0; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>👓 Handy Utils</h1>
+
+    <!-- Home Menu -->
+    <div id="home" class="screen active menu">
+        <div class="focusable" tabindex="0" onclick="showScreen('weather')">🌤️ Weather</div>
+        <div class="focusable" tabindex="0" onclick="showScreen('todo')">✅ Todo List</div>
+        <div class="focusable" tabindex="0" onclick="showScreen('compass')">🧭 Compass</div>
+    </div>
+
+    <!-- Weather Screen -->
+    <div id="weather" class="screen">
+        <div class="focusable" tabindex="0" onclick="getWeather()">Get Current Weather (NYC)</div>
+        <div id="weather-info" style="margin-top:20px; font-size:18px;"></div>
+        <div class="focusable" tabindex="0" onclick="showScreen('home')">← Back</div>
+    </div>
+
+    <!-- Todo Screen -->
+    <div id="todo" class="screen">
+        <input type="text" id="todo-input" placeholder="New task...">
+        <button onclick="addTodo()">Add</button>
+        <ul id="todo-list"></ul>
+        <div class="focusable" tabindex="0" onclick="showScreen('home')">← Back</div>
+    </div>
+
+    <!-- Compass Screen -->
+    <div id="compass" class="screen" style="align-items:center; justify-content:center; font-size:120px;">
+        <div id="compass-dir">N</div>
+        <div class="focusable" tabindex="0" onclick="showScreen('home')" style="margin-top:40px;">← Back</div>
+    </div>
+
+    <script>
+        // Screen navigation
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        // D-pad focus simulation (works in browser + glasses)
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                const focusables = Array.from(document.querySelectorAll('.focusable'));
+                let current = document.activeElement;
+                let index = focusables.indexOf(current);
+                if (index === -1) index = 0;
+                index = (e.key === 'ArrowDown') ? (index + 1) % focusables.length : (index - 1 + focusables.length) % focusables.length;
+                focusables[index].focus();
+            }
+        });
+
+        // Weather
+        async function getWeather() {
+            const info = document.getElementById('weather-info');
+            info.textContent = 'Fetching...';
+            try {
+                const res = await fetch('https://wttr.in/NYC?format=%C+%t');
+                const text = await res.text();
+                info.textContent = `NYC: ${text}`;
+            } catch (e) {
+                info.textContent = 'Offline or error';
+            }
+        }
+
+        // Todo with localStorage
+        let todos = JSON.parse(localStorage.getItem('todos') || '[]');
+        function renderTodos() {
+            const list = document.getElementById('todo-list');
+            list.innerHTML = '';
+            todos.forEach((t, i) => {
+                const li = document.createElement('li');
+                li.textContent = t;
+                li.onclick = () => { todos.splice(i,1); localStorage.setItem('todos', JSON.stringify(todos)); renderTodos(); };
+                list.appendChild(li);
+            });
+        }
+        function addTodo() {
+            const input = document.getElementById('todo-input');
+            if (input.value) {
+                todos.push(input.value);
+                localStorage.setItem('todos', JSON.stringify(todos));
+                input.value = '';
+                renderTodos();
+            }
+        }
+        renderTodos();
+
+        // Simple Compass (device orientation)
+        let lastDir = 'N';
+        window.addEventListener('deviceorientation', (e) => {
+            if (e.webkitCompassHeading !== undefined) {
+                const heading = e.webkitCompassHeading;
+                const dirs = ['N','NE','E','SE','S','SW','W','NW'];
+                lastDir = dirs[Math.round(heading / 45) % 8];
+                if (document.getElementById('compass').classList.contains('active')) {
+                    document.getElementById('compass-dir').textContent = lastDir;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
