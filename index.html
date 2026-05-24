@@ -10,9 +10,9 @@
         html, body {
             margin: 0;
             padding: 0;
-            background: #000;
-            color: #0f0;
-            font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a3a 50%, #0f0f1e 100%);
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             height: 100%;
             overflow: hidden;
             -webkit-user-select: none;
@@ -22,23 +22,34 @@
         body {
             display: flex;
             flex-direction: column;
-            padding: 12px;
+            padding: 16px;
+            background-attachment: fixed;
         }
         
         h1 {
-            font-size: 22px;
+            font-size: 28px;
             margin: 8px 0;
             text-align: center;
+            background: linear-gradient(135deg, #00d4ff, #0099ff, #6633ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
         
         h2 {
-            font-size: 18px;
-            margin: 10px 0;
+            font-size: 20px;
+            margin: 12px 0 16px 0;
+            color: #fff;
+            font-weight: 600;
         }
         
         h3 {
-            font-size: 14px;
-            margin: 8px 0;
+            font-size: 16px;
+            margin: 12px 0 8px 0;
+            color: #00d4ff;
+            font-weight: 600;
         }
         
         /* Screen container */
@@ -49,12 +60,26 @@
             overflow-y: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
+            padding-right: 4px;
+        }
+        
+        .screen-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .screen-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .screen-container::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 255, 0.3);
+            border-radius: 3px;
         }
         
         .screen {
             display: none;
             flex-direction: column;
-            height: 100%;
+            gap: 12px;
         }
         
         .screen.active {
@@ -65,35 +90,60 @@
         .menu {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
             flex: 1;
             justify-content: flex-start;
         }
         
         /* Buttons */
         button, .button {
-            background: #111;
-            color: #0f0;
-            border: 2px solid #333;
-            padding: 14px 16px;
-            margin: 6px 0;
+            background: linear-gradient(135deg, #1a3a5a, #2a4a7a);
+            color: #fff;
+            border: 2px solid rgba(0, 212, 255, 0.4);
+            padding: 16px 20px;
+            margin: 8px 0;
             font-size: 16px;
-            border-radius: 6px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-weight: 600;
             -webkit-tap-highlight-color: transparent;
-            min-height: 44px;
+            min-height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: inherit;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        button:active::before {
+            left: 100%;
         }
         
         button:active, .button:active {
-            border-color: #0f0;
-            background: #222;
-            box-shadow: 0 0 12px #0f0;
+            border-color: #00d4ff;
+            background: linear-gradient(135deg, #0066cc, #0099ff);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.6), 0 8px 24px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        button:hover {
+            border-color: #00d4ff;
+            box-shadow: 0 12px 32px rgba(0, 212, 255, 0.4), 0 8px 24px rgba(0, 0, 0, 0.3);
         }
         
         /* Inputs */
@@ -101,82 +151,104 @@
         input[type="date"],
         textarea,
         select {
-            background: #111;
-            color: #0f0;
-            border: 1px solid #333;
-            padding: 12px;
-            margin: 6px 0;
+            background: rgba(30, 30, 60, 0.8);
+            color: #fff;
+            border: 2px solid rgba(0, 212, 255, 0.2);
+            padding: 12px 16px;
+            margin: 8px 0;
             font-size: 16px;
-            border-radius: 4px;
+            border-radius: 10px;
             font-family: inherit;
             -webkit-appearance: none;
             appearance: none;
-            min-height: 44px;
+            min-height: 48px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        
+        input[type="text"]::placeholder,
+        input[type="date"]::placeholder,
+        textarea::placeholder,
+        select::placeholder {
+            color: rgba(255, 255, 255, 0.4);
         }
         
         input[type="text"]:focus,
         input[type="date"]:focus,
         textarea:focus,
         select:focus {
-            border-color: #0f0;
+            border-color: #00d4ff;
             outline: none;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
-            background: #1a1a1a;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), inset 0 0 10px rgba(0, 212, 255, 0.1);
+            background: rgba(30, 30, 60, 0.95);
         }
         
         /* Cards */
         .card {
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 6px;
-            padding: 12px;
+            background: rgba(20, 30, 60, 0.7);
+            border: 2px solid rgba(0, 212, 255, 0.2);
+            border-radius: 14px;
+            padding: 16px;
             margin: 8px 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 12px 40px rgba(0, 212, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.3);
         }
         
         .card.active {
-            border-color: #0f0;
-            box-shadow: 0 0 8px rgba(0, 255, 0, 0.2);
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), 0 8px 32px rgba(0, 0, 0, 0.3);
         }
         
         .card-header {
             font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 6px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+            padding-bottom: 8px;
+            color: #00d4ff;
         }
         
         /* Grid layouts */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            gap: 12px;
         }
         
         .grid-3 {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 6px;
+            gap: 10px;
         }
         
         .grid-item {
-            background: #0a0a0a;
-            border-left: 3px solid #0f0;
-            padding: 10px;
-            border-radius: 4px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(102, 51, 255, 0.1));
+            border-left: 4px solid #00d4ff;
+            padding: 12px;
+            border-radius: 8px;
             font-size: 14px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
         }
         
         .grid-item-label {
             font-size: 12px;
-            color: #0a0;
-            margin-bottom: 4px;
+            color: rgba(0, 212, 255, 0.7);
+            margin-bottom: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .grid-item-value {
-            font-size: 18px;
-            font-weight: bold;
-            color: #0f0;
+            font-size: 20px;
+            font-weight: 700;
+            color: #00d4ff;
         }
         
         /* Lists */
@@ -187,15 +259,23 @@
         }
         
         .list-item {
-            background: #111;
-            border-left: 3px solid #0f0;
-            padding: 12px;
-            margin: 6px 0;
-            border-radius: 4px;
+            background: linear-gradient(135deg, rgba(26, 58, 90, 0.6), rgba(26, 50, 90, 0.4));
+            border-left: 4px solid #00d4ff;
+            padding: 14px;
+            margin: 8px 0;
+            border-radius: 10px;
             font-size: 14px;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+        
+        .list-item:active {
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.2);
         }
         
         .list-item.completed {
@@ -203,9 +283,9 @@
             text-decoration: line-through;
         }
         
-        .list-item.high { border-left-color: #f00; }
-        .list-item.medium { border-left-color: #ff0; }
-        .list-item.low { border-left-color: #0f0; }
+        .list-item.high { border-left-color: #ff4757; }
+        .list-item.medium { border-left-color: #ffa502; }
+        .list-item.low { border-left-color: #2ed573; }
         
         .list-item-content {
             flex: 1;
@@ -213,52 +293,67 @@
         
         .list-item-actions {
             display: flex;
-            gap: 6px;
-            margin-left: 10px;
+            gap: 8px;
+            margin-left: 12px;
         }
         
         .action-btn {
-            background: #222;
-            color: #0f0;
-            border: 1px solid #333;
-            padding: 6px 10px;
+            background: linear-gradient(135deg, rgba(255, 71, 87, 0.2), rgba(255, 71, 87, 0.1));
+            color: #ff4757;
+            border: 1px solid rgba(255, 71, 87, 0.4);
+            padding: 8px 12px;
             cursor: pointer;
             font-size: 14px;
-            border-radius: 4px;
-            min-height: 36px;
-            min-width: 36px;
+            border-radius: 8px;
+            min-height: 40px;
+            min-width: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s;
+            font-weight: 600;
         }
         
-        .action-btn:active { background: #333; }
+        .action-btn:active {
+            background: linear-gradient(135deg, rgba(255, 71, 87, 0.4), rgba(255, 71, 87, 0.3));
+            border-color: #ff4757;
+            box-shadow: 0 0 15px rgba(255, 71, 87, 0.4);
+        }
         
         /* Status indicators */
         .status {
-            padding: 12px;
+            padding: 14px;
             margin: 8px 0;
-            border-radius: 6px;
+            border-radius: 10px;
             text-align: center;
             font-size: 14px;
+            font-weight: 600;
+            border: 2px solid;
+            backdrop-filter: blur(10px);
         }
         
         .status.loading {
-            background: #1a1a1a;
-            color: #0a0;
-            border: 1px solid #0a0;
+            background: linear-gradient(135deg, rgba(255, 165, 2, 0.15), rgba(255, 165, 2, 0.1));
+            color: #ffa502;
+            border-color: #ffa502;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
         
         .status.success {
-            background: #0a1a0a;
-            color: #0f0;
-            border: 2px solid #0f0;
+            background: linear-gradient(135deg, rgba(46, 213, 115, 0.15), rgba(46, 213, 115, 0.1));
+            color: #2ed573;
+            border-color: #2ed573;
         }
         
         .status.error {
-            background: #1a0a0a;
-            color: #f00;
-            border: 2px solid #f00;
+            background: linear-gradient(135deg, rgba(255, 71, 87, 0.15), rgba(255, 71, 87, 0.1));
+            color: #ff4757;
+            border-color: #ff4757;
         }
         
         /* Modal */
@@ -269,9 +364,16 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
             z-index: 1000;
             flex-direction: column;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         .modal.active { display: flex; }
@@ -279,32 +381,46 @@
         .modal-content {
             flex: 1;
             overflow-y: auto;
-            padding: 12px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
+            background: linear-gradient(135deg, #0f1f3f, #1a2a4a);
+            margin: 20px;
+            border-radius: 16px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
         
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
         
-        .modal-header h2 { margin: 0; }
+        .modal-header h2 {
+            margin: 0;
+            color: #00d4ff;
+        }
         
         .modal-close {
-            font-size: 24px;
+            font-size: 28px;
             cursor: pointer;
-            color: #f00;
+            color: #ff4757;
             padding: 4px 8px;
+            transition: all 0.3s;
+            font-weight: 700;
+        }
+        
+        .modal-close:active {
+            transform: scale(1.1);
         }
         
         .modal-footer {
             display: flex;
-            gap: 8px;
-            padding-top: 12px;
-            border-top: 1px solid #333;
+            gap: 10px;
+            padding-top: 16px;
+            border-top: 2px solid rgba(0, 212, 255, 0.2);
             margin-top: auto;
         }
         
@@ -317,7 +433,7 @@
         .controls {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 6px;
+            gap: 8px;
             margin: 8px 0;
         }
         
@@ -325,17 +441,19 @@
             padding: 10px;
             font-size: 13px;
             font-weight: 600;
+            margin: 0;
         }
         
         .control-btn.active {
-            border-color: #0f0;
-            background: #222;
+            border-color: #00d4ff;
+            background: linear-gradient(135deg, #0066cc, #0099ff);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
         }
         
         /* Responsive utilities */
         .flex-row {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
         
         .flex-col {
@@ -351,7 +469,7 @@
         .text-lg { font-size: 16px; }
         .text-xl { font-size: 20px; }
         
-        .text-muted { color: #0a0; }
+        .text-muted { color: rgba(0, 212, 255, 0.6); }
         .text-center { text-align: center; }
         
         .m-0 { margin: 0; }
@@ -361,22 +479,34 @@
         
         /* Large heading display */
         .heading-large {
-            font-size: 48px;
-            font-weight: bold;
+            font-size: 56px;
+            font-weight: 700;
             text-align: center;
-            margin: 12px 0;
-            color: #0f0;
+            margin: 16px 0;
+            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -2px;
         }
         
         .location-mono {
             font-family: 'Courier New', monospace;
             font-size: 13px;
-            line-height: 1.4;
-            background: #0a0a0a;
-            padding: 10px;
-            border-radius: 4px;
-            border-left: 3px solid #0f0;
+            line-height: 1.6;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(102, 51, 255, 0.1));
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #00d4ff;
             word-break: break-all;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            font-weight: 500;
+        }
+        
+        /* Smooth transitions */
+        * {
+            transition: color 0.3s, border-color 0.3s;
         }
     </style>
 </head>
@@ -393,11 +523,11 @@
 
         <!-- Weather Screen -->
         <div id="weather" class="screen">
-            <h2>Weather</h2>
+            <h2>🌤️ Weather Forecast</h2>
             
             <div class="flex-row">
                 <input type="text" id="weather-location" placeholder="City..." value="NYC" style="flex: 1;">
-                <button onclick="getWeather()" style="width: auto; padding: 12px 16px;">Search</button>
+                <button onclick="getWeather()" style="width: auto; padding: 12px 16px; margin: 8px 0;">Search</button>
             </div>
 
             <div id="weather-current"></div>
@@ -409,7 +539,7 @@
 
         <!-- Navigation Screen -->
         <div id="navigation" class="screen">
-            <h2>Navigation & GPS</h2>
+            <h2>🧭 Navigation & GPS</h2>
             
             <div id="gps-status" class="status loading">⏳ Initializing...</div>
 
@@ -421,27 +551,27 @@
 
             <!-- Waypoint Section -->
             <div class="card">
-                <div class="card-header">Add Waypoint</div>
-                <input type="text" id="waypoint-name" placeholder="Name" style="margin: 0;">
-                <button onclick="addCurrentLocationAsWaypoint()" style="margin: 6px 0;">📍 Save Location</button>
-                <div class="flex-row" style="margin: 6px 0;">
-                    <input type="text" id="waypoint-lat" placeholder="Lat" style="flex: 1; margin: 0;">
-                    <input type="text" id="waypoint-lon" placeholder="Lon" style="flex: 1; margin: 0; margin-left: 6px;">
+                <div class="card-header">📍 Add Waypoint</div>
+                <input type="text" id="waypoint-name" placeholder="Name" style="margin: 0 0 8px 0;">
+                <button onclick="addCurrentLocationAsWaypoint()" style="margin: 8px 0;">📍 Save Current Location</button>
+                <div class="flex-row" style="margin: 8px 0;">
+                    <input type="text" id="waypoint-lat" placeholder="Latitude" style="flex: 1; margin: 0;">
+                    <input type="text" id="waypoint-lon" placeholder="Longitude" style="flex: 1; margin: 0; margin-left: 8px;">
                 </div>
                 <button onclick="addCustomWaypoint()" style="margin: 0;">Add Custom</button>
             </div>
 
             <!-- Waypoints List -->
             <div>
-                <h3>Waypoints</h3>
+                <h3>Your Waypoints</h3>
                 <ul id="waypoints-list"></ul>
             </div>
 
             <!-- Route Tracking -->
             <div class="card">
                 <button onclick="toggleRouteTracking()" id="tracking-btn" style="margin: 0;">🔴 Start Tracking</button>
-                <button onclick="clearRouteHistory()" style="margin: 6px 0 0 0; background: #1a0a0a;">Clear History</button>
-                <div id="route-stats" class="text-sm text-muted" style="margin-top: 8px;"></div>
+                <button onclick="clearRouteHistory()" style="margin: 8px 0 0 0; background: rgba(255, 71, 87, 0.2); border-color: rgba(255, 71, 87, 0.4);">Clear History</button>
+                <div id="route-stats" class="text-sm text-muted" style="margin-top: 12px;"></div>
             </div>
 
             <button onclick="showScreen('home')" style="margin-top: auto;">← Back</button>
@@ -449,17 +579,17 @@
 
         <!-- Todo Screen -->
         <div id="todo" class="screen">
-            <h2>Tasks</h2>
+            <h2>✅ Task Manager</h2>
             
             <!-- Quick Add -->
             <div class="card">
-                <input type="text" id="todo-input" placeholder="Task title..." style="margin: 0 0 6px 0;">
-                <textarea id="todo-desc" placeholder="Notes..." style="height: 36px; margin: 0 0 6px 0;"></textarea>
-                <div class="grid-2" style="margin: 0 0 6px 0;">
+                <input type="text" id="todo-input" placeholder="Task title..." style="margin: 0 0 8px 0;">
+                <textarea id="todo-desc" placeholder="Notes..." style="height: 40px; margin: 0 0 8px 0;"></textarea>
+                <div class="grid-2" style="margin: 0 0 8px 0;">
                     <select id="todo-priority" style="margin: 0;">
-                        <option value="low">Low</option>
-                        <option value="medium" selected>Medium</option>
-                        <option value="high">High</option>
+                        <option value="low">Low Priority</option>
+                        <option value="medium" selected>Medium Priority</option>
+                        <option value="high">High Priority</option>
                     </select>
                     <select id="todo-category" style="margin: 0;">
                         <option value="">Category</option>
@@ -469,7 +599,7 @@
                         <option value="shopping">Shopping</option>
                     </select>
                 </div>
-                <input type="date" id="todo-date" style="margin: 0 0 6px 0;">
+                <input type="date" id="todo-date" style="margin: 0 0 8px 0;">
                 <button onclick="addTodo()" style="margin: 0;">+ Add Task</button>
             </div>
 
@@ -481,7 +611,7 @@
                 <button class="control-btn" onclick="setFilter('high')">🔴 High</button>
             </div>
 
-            <input type="text" id="search-input" placeholder="Search..." onkeyup="filterTodos()">
+            <input type="text" id="search-input" placeholder="Search tasks..." onkeyup="filterTodos()">
 
             <!-- Tasks List -->
             <ul id="todo-list"></ul>
@@ -502,9 +632,9 @@
             <textarea id="edit-desc" placeholder="Notes..." style="height: 40px;"></textarea>
             <div class="grid-2">
                 <select id="edit-priority">
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
+                    <option value="low">Low Priority</option>
+                    <option value="medium">Medium Priority</option>
+                    <option value="high">High Priority</option>
                 </select>
                 <select id="edit-category">
                     <option value="">Category</option>
@@ -517,8 +647,8 @@
             <input type="date" id="edit-date" style="margin-bottom: 12px;">
 
             <div class="modal-footer">
-                <button onclick="saveEdit()" style="flex: 2; background: #0a2a0a; border-color: #0f0;">Save</button>
-                <button onclick="closeEditModal()" style="flex: 1; background: #1a0a0a; border-color: #f00;">Cancel</button>
+                <button onclick="saveEdit()" style="flex: 2; background: linear-gradient(135deg, #2ed573, #20a853); border-color: #2ed573;">Save</button>
+                <button onclick="closeEditModal()" style="flex: 1; background: linear-gradient(135deg, #ff4757, #ff1744); border-color: #ff4757;">Cancel</button>
             </div>
         </div>
     </div>
@@ -561,9 +691,9 @@
                 return;
             }
             
-            let html = '<div style="margin: 8px 0;"><div class="text-sm text-muted">Saved:</div><div style="display: flex; gap: 6px; flex-wrap: wrap;">';
+            let html = '<div style="margin: 12px 0;"><div class="text-sm text-muted" style="margin-bottom: 8px; font-weight: 600;">📍 Saved Locations:</div><div style="display: flex; gap: 8px; flex-wrap: wrap;">';
             savedLocations.forEach(loc => {
-                html += `<button class="control-btn" onclick="setWeatherLocation('${loc}')" style="margin: 0; padding: 8px 10px; font-size: 13px;">📍 ${loc}</button>`;
+                html += `<button class="control-btn" onclick="setWeatherLocation('${loc}')" style="margin: 0; padding: 8px 12px; font-size: 13px;">📍 ${loc}</button>`;
             });
             html += '</div></div>';
             container.innerHTML = html;
@@ -579,12 +709,12 @@
             const currentDiv = document.getElementById('weather-current');
             const forecastDiv = document.getElementById('weather-forecast');
             
-            currentDiv.innerHTML = '<div class="status loading">Fetching...</div>';
+            currentDiv.innerHTML = '<div class="status loading">⏳ Fetching weather data...</div>';
             forecastDiv.innerHTML = '';
 
             try {
                 const res = await fetch(`https://wttr.in/${location}?format=j1`);
-                if (!res.ok) throw new Error('Not found');
+                if (!res.ok) throw new Error('Location not found');
                 const data = await res.json();
                 
                 const current = data.current_condition[0];
@@ -593,14 +723,14 @@
                 
                 let html = `
                     <div class="card active">
-                        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px;">
                             <div class="text-lg">📍 ${areaName}</div>
-                            <div class="heading-large" style="margin: 0; font-size: 32px;">${current.temp_C}°C</div>
+                            <div class="heading-large" style="margin: 0; font-size: 40px;">${current.temp_C}°</div>
                         </div>
-                        <div class="text-sm text-muted">${current.weatherDesc[0].value}</div>
-                        <div class="grid-2" style="margin-top: 8px;">
+                        <div class="text-sm text-muted" style="margin-bottom: 12px;">${current.weatherDesc[0].value}</div>
+                        <div class="grid-2">
                             <div class="grid-item">
-                                <div class="grid-item-label">Feels</div>
+                                <div class="grid-item-label">Feels Like</div>
                                 <div class="grid-item-value">${current.FeelsLikeC}°</div>
                             </div>
                             <div class="grid-item">
@@ -608,31 +738,31 @@
                                 <div class="grid-item-value">${current.humidity}%</div>
                             </div>
                             <div class="grid-item">
-                                <div class="grid-item-label">Wind</div>
-                                <div class="grid-item-value">${current.windspeedKmph}</div>
+                                <div class="grid-item-label">Wind Speed</div>
+                                <div class="grid-item-value">${current.windspeedKmph} km/h</div>
                             </div>
                             <div class="grid-item">
                                 <div class="grid-item-label">Visibility</div>
                                 <div class="grid-item-value">${current.visibility}km</div>
                             </div>
                         </div>
-                        <button onclick="saveLocation('${areaName}')" style="margin-top: 8px; width: 100%;">⭐ Save</button>
+                        <button onclick="saveLocation('${areaName}')" style="margin-top: 12px; width: 100%;">⭐ Save Location</button>
                     </div>
                 `;
                 currentDiv.innerHTML = html;
 
                 const forecast = data.weather.slice(0, 3);
-                let forecastHtml = '<div class="card"><div class="card-header">3-Day Forecast</div><div style="display: flex; gap: 6px; overflow-x: auto;">';
+                let forecastHtml = '<div class="card"><div class="card-header">📅 3-Day Forecast</div><div style="display: flex; gap: 8px; overflow-x: auto; padding-top: 8px;">';
                 
                 forecast.forEach(day => {
                     const date = new Date(day.date);
                     const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
                     
                     forecastHtml += `
-                        <div style="flex-shrink: 0; background: #0a0a0a; padding: 8px; border-radius: 4px; text-align: center; font-size: 12px; border-left: 3px solid #0f0;">
-                            <div style="font-weight: bold; margin-bottom: 4px;">${dayName}</div>
-                            <div>${day.maxtempC}°/${day.mintempC}°</div>
-                            <div style="font-size: 10px; color: #0a0; margin-top: 2px;">💧 ${day.hourly[0]?.chanceofrain || 0}%</div>
+                        <div style="flex-shrink: 0; background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(102, 51, 255, 0.1)); padding: 12px; border-radius: 8px; text-align: center; font-size: 12px; border: 1px solid rgba(0, 212, 255, 0.2); min-width: 80px;">
+                            <div style="font-weight: 700; margin-bottom: 6px; color: #00d4ff;">${dayName}</div>
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">${day.maxtempC}°/${day.mintempC}°</div>
+                            <div style="font-size: 11px; color: rgba(0, 212, 255, 0.7);">💧 ${day.hourly[0]?.chanceofrain || 0}%</div>
                         </div>
                     `;
                 });
@@ -709,11 +839,12 @@
             const locDiv = document.getElementById('location-info');
             locDiv.innerHTML = `
                 <div class="location-mono">
-                    <strong>📍 Location</strong><br>
-                    ${latitude.toFixed(6)}, ${longitude.toFixed(6)}<br>
-                    ±${Math.round(accuracy)}m
+                    <strong>📍 Current Location</strong><br>
+                    Lat: ${latitude.toFixed(6)}<br>
+                    Lon: ${longitude.toFixed(6)}<br>
+                    Accuracy: ±${Math.round(accuracy)}m
                 </div>
-                <div id="nav-quick-stats" class="grid-2" style="margin: 8px 0;">
+                <div id="nav-quick-stats" class="grid-2" style="margin: 12px 0;">
                     <div class="grid-item">
                         <div class="grid-item-label">Speed</div>
                         <div class="grid-item-value">${speed ? (speed * 3.6).toFixed(1) : '--'} km/h</div>
@@ -824,7 +955,7 @@
             const list = document.getElementById('waypoints-list');
             
             if (waypoints.length === 0) {
-                list.innerHTML = '<li class="text-center text-muted" style="padding: 12px;">No waypoints</li>';
+                list.innerHTML = '<li class="text-center text-muted" style="padding: 16px;">No waypoints saved yet</li>';
                 return;
             }
 
@@ -845,8 +976,8 @@
                 li.className = 'list-item';
                 li.innerHTML = `
                     <div class="list-item-content">
-                        <div style="font-weight: bold;">📍 ${wp.name}</div>
-                        <div class="text-sm text-muted">📏 ${distance}km | 🧭 ${bearing}° ${dirText}</div>
+                        <div style="font-weight: 700; margin-bottom: 4px;">📍 ${wp.name}</div>
+                        <div class="text-sm text-muted">📏 ${distance} km | 🧭 ${bearing}° ${dirText}</div>
                     </div>
                     <div class="list-item-actions">
                         <button class="action-btn" onclick="deleteWaypoint(${wp.id})">✕</button>
@@ -867,11 +998,13 @@
             const btn = document.getElementById('tracking-btn');
             if (routeTracking) {
                 btn.textContent = '🟢 Stop Tracking';
-                btn.style.background = '#1a3a1a';
+                btn.style.background = 'linear-gradient(135deg, #2ed573, #20a853)';
+                btn.style.borderColor = '#2ed573';
                 routeHistory = [];
             } else {
                 btn.textContent = '🔴 Start Tracking';
-                btn.style.background = '#111';
+                btn.style.background = 'linear-gradient(135deg, #1a3a5a, #2a4a7a)';
+                btn.style.borderColor = 'rgba(0, 212, 255, 0.4)';
             }
             updateRouteStats();
         }
@@ -889,7 +1022,7 @@
             const duration = Math.round((last.time - first.time) / 1000 / 60);
             const speed = duration > 0 ? ((distance / duration) * 60).toFixed(1) : '0';
 
-            statsDiv.textContent = `📊 ${distance}km | ${duration}min | ${speed}km/h | ${routeHistory.length} points`;
+            statsDiv.textContent = `📊 Distance: ${distance}km | Duration: ${duration}min | Speed: ${speed}km/h | Points: ${routeHistory.length}`;
         }
 
         function clearRouteHistory() {
@@ -1003,10 +1136,10 @@
                 todo.category = document.getElementById('edit-category').value;
                 todo.dueDate = document.getElementById('edit-date').value;
                 saveTodos();
+                closeEditModal();
                 filterTodos();
                 showNotification('Task updated', 'success');
             }
-            closeEditModal();
         }
 
         function setFilter(filter) {
@@ -1019,53 +1152,40 @@
         function filterTodos() {
             const list = document.getElementById('todo-list');
             const search = document.getElementById('search-input').value.toLowerCase();
-
-            const filtered = todos.filter(todo => {
-                if (currentFilter === 'active' && todo.completed) return false;
-                if (currentFilter === 'completed' && !todo.completed) return false;
-                if (currentFilter === 'high' && todo.priority !== 'high') return false;
-
-                return todo.title.toLowerCase().includes(search) ||
-                       todo.description.toLowerCase().includes(search) ||
-                       todo.category.toLowerCase().includes(search);
-            });
-
-            filtered.sort((a, b) => {
-                if (a.completed !== b.completed) return a.completed ? 1 : -1;
-                const priorityOrder = { high: 0, medium: 1, low: 2 };
-                return priorityOrder[a.priority] - priorityOrder[b.priority];
+            
+            let filtered = todos.filter(t => {
+                const matchesFilter = 
+                    currentFilter === 'all' ||
+                    (currentFilter === 'active' && !t.completed) ||
+                    (currentFilter === 'completed' && t.completed) ||
+                    (currentFilter === 'high' && t.priority === 'high');
+                
+                const matchesSearch = 
+                    t.title.toLowerCase().includes(search) ||
+                    t.description.toLowerCase().includes(search);
+                
+                return matchesFilter && matchesSearch;
             });
 
             list.innerHTML = '';
-            
             if (filtered.length === 0) {
-                list.innerHTML = '<li class="text-center text-muted" style="padding: 12px;">No tasks</li>';
+                list.innerHTML = '<li class="text-center text-muted" style="padding: 16px;">No tasks found</li>';
                 return;
             }
 
             filtered.forEach(todo => {
                 const li = document.createElement('li');
                 li.className = `list-item ${todo.priority} ${todo.completed ? 'completed' : ''}`;
-
-                let dueText = '';
-                if (todo.dueDate) {
-                    const dueDate = new Date(todo.dueDate);
-                    const today = new Date();
-                    const diffDays = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
-                    dueText = `📅 ${todo.dueDate}`;
-                    if (diffDays < 0) dueText += ' (LATE)';
-                }
-
-                const catText = todo.category ? `[${todo.category.toUpperCase()}]` : '';
-
                 li.innerHTML = `
                     <div class="list-item-content">
-                        <div>${todo.title}</div>
-                        ${todo.description ? `<div class="text-sm text-muted">📝 ${todo.description}</div>` : ''}
-                        <div class="text-sm text-muted">${catText} ${dueText}</div>
+                        <div style="font-weight: 700; margin-bottom: 4px; cursor: pointer;" onclick="toggleComplete(${todo.id})">${todo.completed ? '✓' : '○'} ${todo.title}</div>
+                        ${todo.description ? `<div class="text-sm text-muted">${todo.description}</div>` : ''}
+                        <div class="text-sm text-muted" style="margin-top: 4px;">
+                            ${todo.category ? `📁 ${todo.category} | ` : ''}
+                            ${todo.dueDate ? `📅 ${new Date(todo.dueDate).toLocaleDateString()}` : ''}
+                        </div>
                     </div>
                     <div class="list-item-actions">
-                        <button class="action-btn" onclick="toggleComplete(${todo.id})">${todo.completed ? '↩' : '✓'}</button>
                         <button class="action-btn" onclick="openEditModal(${todo.id})">✎</button>
                         <button class="action-btn" onclick="deleteTodo(${todo.id})">✕</button>
                     </div>
@@ -1074,6 +1194,7 @@
             });
         }
 
+        // Initialize on load
         filterTodos();
     </script>
 </body>
